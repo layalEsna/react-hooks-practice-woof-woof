@@ -21,10 +21,12 @@
 
 import React, {useState, useEffect} from "react";
 import DogPage from "./DogPage";
+import DogFilter from "./DogFilter";
 
 
 function App() {
   const [dogsBar, setdogBar] = useState([])
+  const [goodDogOn, setgoodDogOn] = useState(false)
 
   useEffect(() => {
     fetch('http://localhost:3001/pups')
@@ -34,11 +36,20 @@ function App() {
       })
     .catch(e=> console.e(e))
   }, [])
+
+  function handleFilterGoodDogs() {
+    setgoodDogOn(prev=>!prev)
+  }
+
+  const displayGoodDogs = goodDogOn? dogsBar.filter(dog=> dog.isGoodDog) : dogsBar
   return (
     <div className="App">
-
+      <DogFilter
+        handleFilterGoodDogs={handleFilterGoodDogs}
+        goodDogOn={goodDogOn}
+      />
       <DogPage
-      dogsBar={dogsBar}
+      dogsBar={displayGoodDogs}
       />
     </div>
   );
